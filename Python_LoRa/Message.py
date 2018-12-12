@@ -21,13 +21,16 @@ class Message:
         string = self.type+","+self.msgID+","+self.ttl+","+self.hops+","+self.ownAddr+","+self.destAddr+","+self.msg+","
         return string
     
-    def send(self,sio,dest):
+    def send(self,sio,iteration):
         time.sleep(1)
-        sio.write('AT+SEND='+str(self.messageSize())+'\r\n')
+        sio.write('AT+DEST='+self.destAddr+'\r\n')
         sio.flush()
-        time.sleep(1)
-        sio.write(self.getMessage())
-        
-        
-        
-    #def sendMsg(self):
+        while iteration > 0:
+            print(self.getMessage())
+            time.sleep(1)
+            sio.write('AT+SEND='+str(self.messageSize())+'\r\n')
+            sio.flush()
+            time.sleep(1)
+            sio.write(self.getMessage())
+            sio.flush()
+            iteration = iteration -1

@@ -1,12 +1,11 @@
 import serial
 import io
 import time
-import random
 import Node as node
 from _thread import start_new_thread
 
 ser = serial.Serial ("/dev/ttyS0")#Open named port)
-ser.timeout = 0.1
+ser.timeout = 0.3
 ser.baudrate = 115200
 
 read = ""
@@ -16,6 +15,7 @@ if(not ser.isOpen()):
     ser.open()
 
 sio = io.TextIOWrapper(io.BufferedRWPair(ser,ser))
+test = node.Node("New",ser,"",[])
 
 def readSerialLine():
     global read
@@ -25,22 +25,26 @@ def readSerialLine():
         if read != "":
             print(read)
             tempMessage = read.split(',')
-            if len(tempMessage) > 4:
-                message = tempMessage 
+            if len(tempMessage) > 5:
+                message = tempMessage
+                test.globalMessage = message
+                test.input()
             
 start_new_thread(readSerialLine,())
 
-test = node.Node("New",ser,"",[])
+
 test.config()
-i= 4
+test.globalMessage=[]
+#test.input()
+i= 1
 while i>=0:
-    test.adrDiscovery(read,i)
+    test.adrDiscovery(i)
     print(i)
     if test.state != "New":
         break
     i=i-1
 
-test.sendAlive()
+#test.sendAlive()
 
 #Eingabe für die Tastatur
 while 1:          
