@@ -56,35 +56,37 @@ def inputMessage():
             if resMessage.type=="AACK":
                 node.saveKnownAddr()
             if resMessage.type=="ALIV":
-                shutDown()
+                #To Check is it the own ALIV
+                if node.msgIsAlreadyStored(resMessage) == False:
+                    shutDown()
         if node.state == "Node":
             if resMessage.type == "NRST":
                 shutDown()
+            
         if node.state == "Node" or node.state == "Koordinator":
             if resMessage.type != "":
+                print("Check Message and forwarding ")
                 checkMssgAndStore(resMessage)
                 #tCheckMssg = threading.Thread(target = checkMssgAndStore,name ='checkMssgAndStore',args=([resMessage]))
                 #tCheckMssg.start()
 def checkMssgAndStore(msg):
     global sio
-    if node.addr == msg.destAddr:
+    if node.addr.zfill(4) == msg.destAddr.zfill(4):
         print("Du hast eine neue Nachricht: "+msg.msg)
         return
     else:
         if node.msgIsAlreadyStored(msg) == True:
             print("MSSG is alrady stored")
             return
+        if msg.ttl==msg.hops:
+            print("No forwarding TTL=Hops")
+            return
         if node.msgIsAlreadyStored(msg) == False:
             print("append: "+ msg.type)
             node.mssgQueue.append(msg)
             msg.sendMsgForwarding(sio)
             return
-            
-        
-#def sendMessages():
-   
-        
-    
+               
 
 def shutDown():
     if node.state == "Koordinator":
@@ -100,14 +102,11 @@ def shutDown():
 
 node.globalMessage = ms.Message.from_array(["","","","","","","","","",""])
 node.config()
-addrTimes = 14
+addrTimes = 10
 node.adrDiscovery(addrTimes)
 #tDisc = threading.Thread(target = node.adrDiscovery,name ='addrDiscovery',args=([addrTimes]))
 #tDisc.start()
 
-
-    
-   
 
 #Eingabe für die Tastatur
 while 1:          

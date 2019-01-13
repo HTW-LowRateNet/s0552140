@@ -18,10 +18,11 @@ class Message:
         
     @classmethod
     def from_array(class_object,message):
-        return class_object(message[3],message[4],message[5],message[6],message[7],message[8],message[9])
+        payload = ",".join(message[9:])
+        payload = payload.replace("\n","",1)
+        return class_object(message[3],message[4],message[5],message[6],message[7],message[8],payload)
         
-    
-    
+  
     def messageSize(self):
         str = self.getMessage()
         size = len(str)
@@ -35,10 +36,7 @@ class Message:
         print(self.getMessage())
         tempHops = int(self.hops)+1
         self.hops = str(tempHops)
-        #self.ttl = Schauen ob hier noch was getan werden muss !!
         time.sleep(1)
-        sio.write('AT+DEST=FFFF\r\n')
-        sio.flush()
         print('Forwarding Message: '+self.getMessage())
         time.sleep(.500)
         sio.write('AT+SEND='+str(self.messageSize())+'\r\n')
@@ -48,9 +46,6 @@ class Message:
         sio.flush()
         
     def send(self,sio,iteration):
-        time.sleep(1)
-        sio.write('AT+DEST='+self.destAddr+'\r\n')
-        sio.flush()
         while iteration > 0:
             print(self.getMessage())
             time.sleep(.500)
@@ -59,4 +54,5 @@ class Message:
             time.sleep(1)
             sio.write(self.getMessage())
             sio.flush()
+            print("SENDED: "+self.getMessage())
             iteration = iteration -1
