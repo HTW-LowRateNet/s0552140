@@ -26,7 +26,7 @@ class Node:
         self.sio.write('AT+DEST=FFFF\r\n')
         self.sio.flush()
         self.setAddr()
-        message = ms.Message("CDIS","","2","1",self.addr,"FFFF","")
+        message = ms.Message("CDIS","","2","1",self.addr,"0000","")
         message.send(self.sio,3)
         
     def adrDiscovery(self,i):
