@@ -102,7 +102,7 @@ def shutDown():
 
 node.globalMessage = ms.Message.from_array(["","","","","","","","","",""])
 node.config()
-addrTimes = 10
+addrTimes = 1
 node.adrDiscovery(addrTimes)
 #tDisc = threading.Thread(target = node.adrDiscovery,name ='addrDiscovery',args=([addrTimes]))
 #tDisc.start()

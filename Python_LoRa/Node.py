@@ -58,7 +58,7 @@ class Node:
             tempAddr = "0"
         if self.state == "Node":
             tempAddr = self.addr
-            message = ms.Message("AACK","","0","0",self.addr,"0000","")
+            message = ms.Message("AACK","","0","0",self.addr,"0000","Florian")
             message.send(self.sio,2)
             print('SEND AACK')
             time.sleep(1)
@@ -74,7 +74,7 @@ class Node:
         
     def getAddrFromKoordinator(self):
         print("get Addr from Coordinator")
-        message = ms.Message("ADDR","","0","0",self.addr,"0000","")
+        message = ms.Message("ADDR","","0","0",self.addr,"0000","Florian")
         message.send(self.sio,3)
         time.sleep(2)
         haveAdress = 1
@@ -119,7 +119,7 @@ class Node:
             return False
         if self.mssgQueue != []:
             for m in self.mssgQueue:
-                print(m.type)
+                #print(m.type)
                 if m.msgID == msg.msgID: 
                      return True
                 else:
@@ -161,7 +161,7 @@ class Node:
         
         if self.addrAnfrage:
             return
-        message = ms.Message("ALIV","","0","0",self.addr,"FFFF","I am the captain(Florian)!")
+        message = ms.Message("ALIV","","5","0",self.addr,"FFFF","I am the captain(Florian)!")
         #To check it is own alive by forwarding other nodes
         self.mssgQueue.append(message)
         while times > 0 and self.addrAnfrage == False :

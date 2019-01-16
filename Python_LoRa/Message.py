@@ -29,7 +29,7 @@ class Message:
         return size
            
     def getMessage(self):
-        string = self.type+","+self.msgID+","+self.ttl+","+self.hops+","+self.sendAddr+","+self.destAddr+","+self.msg+","
+        string = self.type+","+self.msgID+","+self.ttl+","+self.hops+","+self.sendAddr+","+self.destAddr+","+self.msg
         return string
     
     def sendMsgForwarding(self,sio):
